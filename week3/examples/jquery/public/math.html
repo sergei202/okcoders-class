@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Math jQuery Example</title>
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>     <!-- Load jQuery via CDN -->
+		<script>
+			$(document).ready(function() {					// Our client-side program waits till the document and jQuery are ready
+
+				$('#addBtn').on('click', function() {		// Add a click handler for our #addBtn
+					var num1 = $('#number1').val();			// Get the values from our input number fields
+					var num2 = $('#number2').val();			//
+					num1 = Number(num1);					// Convert them from strings to numbers
+					num2 = Number(num2);					//
+					var result = num1 + num2;				// Add the results and store in a variable
+					$('#result').val(result);				// Assign the result back to our result input field
+				});
+
+				$('#subBtn').on('click', function() {		// Handler for subtraction
+					var num1 = Number($('#number1').val());	// Get the value and convert it to a number in one step
+					var num2 = Number($('#number2').val());	//
+					$('#result').val(num1-num2);			// Set #result
+				});
+			});
+		</script>
+    </head>
+    <body>
+	    <input type="number" id="number1" value=5>							<!-- input number field for our first number, default to 5  -->
+		<input type="button" id="addBtn" value="+">							<!-- Add button -->
+		<input type="button" id="subBtn" value="-">							<!-- Subtract button -->
+		<input type="number" id="number2" value=7>							<!-- input number field for our second number, default to 7  -->
+	    =
+	    <input type="number" id="result" placeholder="Result" readonly>		<!-- Create a readonly number field to hold our result -->
+    </body>
+</html>

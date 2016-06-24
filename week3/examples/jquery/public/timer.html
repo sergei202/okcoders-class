@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Timer jQuery Example</title>
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>     <!-- Load jQuery via CDN -->
+		<script>
+			function changeStuff() {											// Define a function that will handle our DOM (document) manipulation.
+				$('#favColor').html('<span style="color:blue">BLUE</span>');	// Find #favColor and set the html content to 'BLUE' written in blue text.
+                $('#favColor').css('font-size', '150px');                       // Set the CSS style 'font-size' to something huge.
+            }
+
+			$(document).ready(function() {			// Wait till the document is ready
+				setTimeout(changeStuff,3000);		// Wait 3000ms (3 seconds) before running changeStuff()
+			});
+		</script>
+    </head>
+    <body>
+    	<div id="favColor">Favorite Color Goes Here... 3 seconds</div>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Append jQuery Example</title>
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>     <!-- Load jQuery via CDN -->
+		<script>
+			var currentNumber = 1;
+			function addNumber() {					// Define a function add a number to our number list
+				var target = $('#numberList');		// Get our target element, this is where new li elements will be appended
+				var li = $('<li></li>');			// Create a brand new li (List Item) DOM element
+				li.text(currentNumber + ' is my favorite');		// Set the text of li
+				target.append(li);					// Append our new element to our target element
+
+				currentNumber++;					// Increment our currentNumber variable
+			}
+
+			$(document).ready(function() {			// Wait till the document is ready
+				setInterval(addNumber,250);			// Call addNumber() every 250ms (0.25 seconds)
+			});
+		</script>
+    </head>
+    <body>
+		<h1>List of my Favorite Numbers</h1>
+        <ul id="numberList"></ul>					<!-- Create an empty unordered list, our numbers will get appended here -->
+    </body>
+</html>

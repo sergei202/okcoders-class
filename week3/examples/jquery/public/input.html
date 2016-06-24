@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Input jQuery Example</title>
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>     <!-- Load jQuery via CDN -->
+		<script>
+			$(document).ready(function() {									// Our client-side program waits till the document and jQuery are ready
+				$('#myButton').on('click', function() {						// Attach a click event handler onto our button
+					var myNameText = $('#myName').val();					// Get the text out of our input text field
+					var outputHtml = '<h1>Hi ' + myNameText + '!!!</h1>';	// Craft something cunning to say
+					$('#nameOutput').html(outputHtml);						// Impress the user
+				});
+			});
+		</script>
+    </head>
+    <body>
+	    <input type="text" id="myName">								<!-- This is an input text field for the user to tell us their name -->
+	    <input type="button" id="myButton" value="Say My Name">		<!-- Our submit button.  'value' is the button label -->
+	    <h1 id="nameOutput"></h1>									<!-- Create an empty h1 element for our output -->
+    </body>
+</html>

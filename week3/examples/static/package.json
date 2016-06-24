@@ -1,0 +1,10 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "main": "static.js",
+  "author": "Sergei Golimbievsky",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
