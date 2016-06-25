@@ -1,0 +1,11 @@
+{
+  "name": "ajax",
+  "version": "1.0.0",
+  "main": "ajax.js",
+  "author": "Sergei Golimbievsky",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "zipcodes": "^2.1.0"
+  }
+}
