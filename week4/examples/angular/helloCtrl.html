@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello AngularJS App</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);        // Define our app module called 'myApp'
+            angular.module('myApp').controller('HelloCtrl', function($scope) {  // Define a controller called HelloCtrl
+                $scope.myName = 'Sergei';       // Add a few scope properties
+                $scope.age = 32;                //
+            });
+        </script>
+    </head>
+    <body ng-app="myApp">                   <!-- Tell Angular use the myApp module -->
+        <div ng-controller="HelloCtrl">     <!-- Tell Angular to use our HelloCtrl here -->
+            <p>My name is {{myName}}</p>    <!-- All of the scope properties we defined for our controller are available here! -->
+            <p>I am {{age}} years old</p>
+        </div>
+        <p>This won't work: {{myName}}</p>  <!-- Note that we can't access the scope properties of HelloCtrl outside of the element it was defined on -->
+    </body>
+</html>

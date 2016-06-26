@@ -122,3 +122,68 @@ How about buttons?  Angular provides a `ng-click` directive that run expressions
 <input type="button" value="Blue" ng-click="favColor='blue'">
 <p>You like: {{favColor}}</p>
 ```
+
+Modules and Controllers
+-----------------------
+Everything we have done so far has been without a single line of 'real' javascript, all the code has been in markup on elements.
+
+Code that interfaces with scope variables (anything that affects what is shown on screen) goes into *controllers*.  A controller is a javascript function where all of our logic that controls our app is stored.
+
+Before we can use any controllers, we need to define an Angular *module*.  Angular modules allow us to bundle controllers, services, directives, etc, all into one app.   Let's see how we define our module:
+```js
+angular.module('myApp', []);		// Define a module called 'myApp' with no dependences (the empty array is where other module dependences would go)
+```
+Now that we defined our module, we need to tell Angular use it with our html markup.  We do this by setting `ng-app="myApp"`:
+```html
+<body ng-app="myApp">
+	...
+</body>
+```
+Note that whatever `ng-app` points to needs to be a valid module, otherwise Angular will throw cryptic errors.
+
+Let's see how to define a controller:
+
+```js
+angular.module('myApp').controller('HelloCtrl', function($scope) {	// We define a new controller onto our existing myApp module.  This controller is called 'HelloCtrl' and has the $scope service injected into it.
+	$scope.myName = 'Sergei';										// $scope is a built-in Angular service that allows us access to scope, where we can use expressions to render things to the user.
+});
+```
+
+Let's see the code of a full example:
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Hello AngularJS App</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);        // Define our app module called 'myApp'
+            angular.module('myApp').controller('HelloCtrl', function($scope) {  // Define a controller called HelloCtrl
+                $scope.myName = 'Sergei';       // Add a few scope properties
+                $scope.age = 32;                //
+            });
+        </script>
+    </head>
+    <body ng-app="myApp">                   <!-- Tell Angular use the myApp module -->
+        <div ng-controller="HelloCtrl">     <!-- Tell Angular to use our HelloCtrl here -->
+            <p>My name is {{myName}}</p>    <!-- All of the scope properties we defined for our controller are available here! -->
+            <p>I am {{age}} years old</p>
+        </div>
+        <p>This won't work: {{myName}}</p>  <!-- Note that we can't access the scope properties of HelloCtrl outside of the element it was defined on -->
+    </body>
+</html>
+
+```
+
+We can also define scope methods (functions) in the same way:
+```js
+angular.module('myApp').controller('MathCtrl', function($scope) {
+	$scope.num1 = 0;
+	$scope.num2 = 0;
+	$scope.doAdd = function() {						// We can now access this from markup, eg:  'ng-click="doAdd()"'
+		$scope.result = $scope.num1 + $scope.num2;
+	};
+});
+```
+See the full example in `examples/angular/mathCtrl.html`.

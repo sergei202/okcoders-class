@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Math AngularJS App</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);        // Define our app module called 'myApp'
+            angular.module('myApp').controller('MathCtrl', function($scope) {
+            	$scope.num1 = 30;
+            	$scope.num2 = 42;
+            	$scope.doAdd = function() {						  // We can now access this from markup, eg:  'ng-click="doAdd()"'
+            		$scope.result = $scope.num1 + $scope.num2;    // Set
+            	};
+            });
+        </script>
+    </head>
+    <body ng-app="myApp">                   <!-- Tell Angular use the myApp module -->
+        <div ng-controller="MathCtrl">       <!-- Tell Angular to use our MathCtrl here -->
+            <input type="number" ng-model="num1">
+            <input type="number" ng-model="num2">
+            <input type="button" ng-click="doAdd()" value="Add!">         <!-- We tell ng-click to run doAdd() when our button is clicked -->
+            <input type="number" ng-model="result" readonly>
+        </div>
+    </body>
+</html>
