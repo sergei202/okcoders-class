@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AngularJS Buttons</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    </head>
+    <body ng-app>
+        <p>What is your favorite color?</p>
+        <input type="button" value="Red" ng-click="favColor='red'">
+        <input type="button" value="Green" ng-click="favColor='green'">
+        <input type="button" value="Blue" ng-click="favColor='blue'">
+        <p>You like: {{favColor}}</p>
+    </body>
+</html>

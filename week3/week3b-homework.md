@@ -11,10 +11,10 @@ AngularJS
 ---------
 We will start AngularJS next week.  Everyone should spend a little time getting at least familiar with the concepts.  Here are some great resources:
 
+- [TutorialsPoint](http://www.tutorialspoint.com/angularjs/index.htm)
 - [w3schools AngularJS Tutorial](http://www.w3schools.com/angular/)
-- [Offical AngularJS Tutorial](https://docs.angularjs.org/tutorial)
+- [Official AngularJS Tutorial](https://docs.angularjs.org/tutorial)
 - [Code School AngularJS Tutorial](https://www.codecademy.com/learn/learn-angularjs)
-
 
 Bootstrap
 ---------

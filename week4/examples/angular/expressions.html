@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AngularJS Expressions App</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    </head>
+    <body ng-app ng-init="person={age:32, firstName:'Bob', lastName:'Smith'}; numbers=[16,42,202,63536]">
+        <p>Age: {{person.age}}</p>
+        <p>First Name: {{person.firstName}}</p>
+        <p>Last Name: {{person.lastName}}</p>
+        <p>Favorite Numbers:</p>
+        <ul>
+            <li ng-repeat="num in numbers">{{num}}</li>
+        </ul>
+    </body>
+</html>
