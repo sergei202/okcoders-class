@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bootstrap Table</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    </head>
+    <body>
+
+        <div class="container" style="padding-top:30px">    <!-- a container class puts margins to the left and right of our body, we manually add some padding-top to give us some room -->
+            <div class="row">                               <!-- Bootstrap rows each have 12 columns -->
+                <div class="col-sm-6 col-sm-offset-3">      <!-- Add a centered column that takes up 1/2 of the width -->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Example Panel with Table Example</h3>    <!-- Our panel title -->
+                        </div>
+                        <div class="panel-body">            <!-- Our app markup with live here -->
+                            Our form inputs go here
+                        </div>
+                        <table class="table">               <!-- Note we put our table *OUTSIDE* the panel-body div.  This is so it takes the full width of the panel. -->
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                            </tr>
+                            <tr>                            <!-- Our ng-repeat will go on this tr -->
+                                <td>[item name]</td>        <!-- Our item expressions will be inside our td's -->
+                                <td>[price]</td>
+                                <td>[qty]</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

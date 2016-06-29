@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bootstrap Form</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    </head>
+    <body>
+
+        <div class="container" style="padding-top:30px">    <!-- a container class puts margins to the left and right of our body, we manually add some padding-top to give us some room -->
+            <div class="row">                               <!-- Bootstrap rows each have 12 columns -->
+                <div class="col-sm-6 col-sm-offset-3">      <!-- Add a centered column that takes up 1/2 of the width -->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Example Panel Title</h3>    <!-- Our panel title -->
+                        </div>
+                        <div class="panel-body">                                <!-- Our app markup with live here -->
+
+                            <div class="form-group">                            <!-- form-group is always a label and an input -->
+                                <label>First Field Label</label>                <!-- A text label to show to the user -->
+                                <input type="text" class="form-control" placeholder="Item Name" required>   <!-- Our input element with a form-control class -->
+                            </div>
+                            <div class="form-group">
+                                <label>My Second Field Label</label>
+                                <input type="number" class="form-control" placeholder="Item Price" required>
+                            </div>
+                            <div class="text-center">                           <!-- Center everything inside this div -->
+                                <input type="button" class="btn btn-primary" value="Submit">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
