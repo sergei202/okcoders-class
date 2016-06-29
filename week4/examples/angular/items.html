@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Inventory List AngularJS App</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);        // Define our app module called 'myApp'
+            angular.module('myApp').controller('ItemCtrl', function($scope) {		// Create a controller called ItemCtrl
+				$scope.items = [];					// Create an empty array on scope called 'items', this is where our items will go
+				$scope.addItem = function() {		// Create a scope function called addItem()
+					$scope.items.push($scope.newItem);		// Add $scope.newItem to our items array
+					$scope.newItem = {};					// Set $scope.newItem to a new object (clears the input boxes and prevents duplicates)
+				};
+            });
+        </script>
+    </head>
+    <body ng-app="myApp" ng-controller="ItemCtrl">
+		Name: <input type="text" ng-model="newItem.name"><br>
+		Price: <input type="number" ng-model="newItem.price"><br>
+		<input type="button" value="Add Item" ng-click="addItem()" ng-disabled="!newItem.name || !newItem.price">	<!-- ng-disabled: disables the button when the expression is true (disabled if either name or price are blank/zero) -->
+		<ul>
+			<li ng-repeat="item in items">			<!-- Loop through our items -->
+				{{item.name}} for {{item.price}}	<!-- ng-repeat creates a new scope property called 'item' for us -->
+			</li>
+		</ul>
+    </body>
+</html>

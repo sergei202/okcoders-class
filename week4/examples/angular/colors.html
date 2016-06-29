@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Colors</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+		<script>
+			angular.module('myApp', []);
+			angular.module('myApp').controller('ColorCtrl', function($scope) {
+				$scope.colors = [];
+
+				for(var i=0;i<=255;i+=4) {				// Loop 0-255 in steps of 4
+					var color = makeHexColor(0,0,i);	// Make a blue color
+					$scope.colors.push(color);
+				}
+
+
+				// Our helper functions
+				function toHex(number) {					// Convert a number into a 2-digit hex string
+					number = number.toString(16);
+					if(number.length==1) number = '0'+number;
+					return number;
+				}
+				function makeHexColor(red,green,blue) {		// Take the individual color components (0-255) and return a hex color code
+					red = toHex(red);
+					green = toHex(green);
+					blue = toHex(blue);
+					return '#'+red+green+blue;
+				}
+			});
+		</script>
+	</head>
+	<body ng-app="myApp" ng-controller="ColorCtrl">
+		<div ng-repeat="color in colors" style="background-color:{{color}}">
+			{{color}}
+		</div>
+	</body>
+</html>
