@@ -1,0 +1,111 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Minimum AngularJS App</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+          angular.module('myInvApp',[]);
+          angular.module('myInvApp').controller('TestCtrl', function($scope){
+            $scope.list = [
+				{name:'Cat food',	price:4.99,		qty:2},
+				{name:'Dog food',	price:8.99,		qty:4},
+				{name:'Human food',	price:15.99,	qty:1}
+			];
+
+            $scope.addItem = function() {
+				if($scope.list.indexOf($scope.newItem)==-1) $scope.list.push($scope.newItem);
+				$scope.newItem = {};
+            };
+
+			$scope.getTotals = function() {
+				var totals = {
+					price: 0,
+					qty: 0,
+					subtotal: 0
+				};
+				for(var i=0;i<$scope.list.length;i++) {
+					totals.price += $scope.list[i].price;
+					totals.qty += $scope.list[i].qty;
+					totals.subtotal += $scope.list[i].price*$scope.list[i].qty;
+				}
+				return totals;
+			};
+
+			$scope.deleteItem = function(item) {
+				var index = $scope.list.indexOf(item);
+				$scope.list.splice(index,1);
+			};
+			$scope.selectItem = function(item) {
+				console.log('selectItem() item=', item);
+				$scope.newItem = item;
+			};
+
+         });
+
+        </script>
+    </head>
+
+    <body ng-app="myInvApp" ng-controller="TestCtrl" style="background-color: #aaa"> <!--style="width: 400px; margin: auto;"  style="margin-top: 20px;"-->
+
+        <div class="container" style="padding-top:30px">    <!-- a container class puts margins to the left and right of our body, we manually add some padding-top to give us some room -->
+            <div class="row">                               <!-- Bootstrap rows each have 12 columns -->
+                <div class="col-sm-6 col-sm-offset-3">      <!-- Add a centered column that takes up 1/2 of the width -->
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Inventory App</h3>      <!-- Our panel title -->
+                        </div>
+						<div class="panel-body">	                     <!-- Our app markup with live here -->
+
+	                        <div class="form-group">                            <!-- form-group is always a label and an input -->
+	                            <label>Item Name</label>                <!-- A text label to show to the user -->
+	                            <input type="text" class="form-control" ng-model="newItem.name" placeholder="Item Name" required>   <!-- Our input element with a form-control class -->
+	                        </div>
+
+	                        <div class="form-group">
+	                          <label>Item Price</label>
+	                            <input type="number" class="form-control" ng-model="newItem.price" placeholder="Item Price" required>
+	                        </div>
+	                        <div class="form-group">
+	                          <label>Item Qty</label>
+	                            <input type="number" class="form-control" ng-model="newItem.qty" placeholder="Item Price" required>
+	                        </div>
+
+	                        <div class="text-center">                           <!-- Center everything inside this div -->
+	                          <input type="button" class="btn btn-primary" ng-click="addItem()" value="Submit" ng-disabled="!newItem.name || !newItem.price || !newItem.qty">
+	                        </div>
+						</div>
+
+						<table class="table">
+							<tr>
+								<th>Item Name</th>
+								<th class="text-right">Price</th>
+								<th class="text-right">Quantity</th>
+								<th class="text-right">Total</th>
+								<th></th>
+							</tr>
+							<tr ng-repeat="item in list" >                                            <!-- Our ng-repeat will go on this tr -->
+								<td ng-click="selectItem(item)">{{item.name}}</td>                        <!-- Our item expressions will be inside our td's -->
+								<td class="text-right">{{item.price | currency}}</td>
+								<td class="text-right">{{item.qty}}</td>
+								<td class="text-right">{{item.price * item.qty | currency}}</td>
+								<td class="text-right text-danger">
+									<span class="glyphicon glyphicon-remove" ng-click="deleteItem(item)"></span>
+								</td>
+							</tr>
+							<tr>
+								<th class="text-right">Totals:</th>
+								<th class="text-right">{{getTotals().price | currency}}</th>
+								<th class="text-right">{{getTotals().qty}}</th>
+								<th class="text-right">{{getTotals().subtotal | currency}}</th>
+							</tr>
+						</table>
+                	</div>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
