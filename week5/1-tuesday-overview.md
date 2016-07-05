@@ -5,7 +5,7 @@ MongoDB
 -------
 MongoDB is a NoSQL database.  Why are we using it versus something like MySQL?  Because Mongo allows us to store and query records (called *documents*) as JSON objects.  This is incredibly powerful when used with Node and Angular.
 
-Please read this [MongoDB tutorial] (tutorialspoint.com)[http://www.tutorialspoint.com/mongodb/index.htm]
+Please read this [MongoDB tutorial](http://www.tutorialspoint.com/mongodb/index.htm)
 to at least deleting documents.
 
 
@@ -68,20 +68,20 @@ mongoose.Promise = global.Promise;					// Tell mongoose to our ES6 promises
 mongoose.connect('mongodb://localhost/test');		// Connect to our local MongoDB instance and use the 'test' database
 
 var Item = mongoose.model('Item', {					// Our Item model has this schema:
-	sku: String,		// We list properties and their types
-	name: String,		// 'name' is always a string
-	price: Number,		// 'price' and 'qty' are always numbers
+	sku: String,			// We list properties and their types
+	name: String,			// 'name' is always a string
+		price: Number,		// 'price' and 'qty' are always numbers
 	qty: Number
 });
 
-var catFood = new Item({		// Create a new item using the same properties that we used before
+var catFood = new Item({			// Create a new item using the same properties that we used before
 	sku: '80334',
 	name: 'Cat Food',
 	price: 8.99,
 	qty: 15
 });
 
-var p = catFood.save();	// We just have to save() our document to save it into MongoDB.
+var p = catFood.save();				// We just have to save() our document to save it into MongoDB.
 p.then(function(doc) {
 	console.log('catFood saved successfully: %j', doc);
 }, function(error) {
@@ -96,9 +96,9 @@ Item.find().exec().then(function(items) {
 });
 ```
 
-What if we wanted to find a specific item and decrease the quantify by one?
+What if we wanted to find a specific item and decrease the quantity by one?
 ```js
-Item.findOne({sku:'80334'}).exec().then(function(item) {		// Find one item that has a sku of '80334'  
+Item.findOne({sku:'80334'}).exec().then(function(item) {		// Find one item that has a sku of '80334'
 	if(!item) return console.log('Item not found!');			// Bail out if the item isn't found`
 	item.qty--;													// Decrease the qty by one
 	return item.save();											// Save the item changes and return a Promise (document.save() always returns a Promise)
