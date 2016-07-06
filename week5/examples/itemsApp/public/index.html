@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Items Mongoose App</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);
+            angular.module('myApp').controller('ItemCtrl', function($scope,$http) {
+
+				function getItems() {                                   // Create a function called getItems()
+					$http.get('/items').then(function(response) {       // Send a GET request to /items and then...
+						$scope.items = response.data;                   // Assign response.data (whatever the server sent us) to $scope.items
+					});
+				}
+				getItems();                                             // Call getItems() to load the items from the server immediately
+
+				$scope.addItem = function() {                           // Define addItem() on $scope for our button's ng-click
+					$http.post('/items', $scope.newItem).then(function() { // Send a POST request to /items with $scope.newItem as the body and then...
+                        getItems();             // Call getItems() to refresh $scope.items
+                        $scope.newItem = {};    // Clear out what is in our input fields by assigning $scope.newItem to an empty object
+                    });
+				};
+
+            });
+        </script>
+    </head>
+    <body ng-app="myApp">                                    <!-- Tell Angular use the myApp module -->
+		<div class="container" ng-controller="ItemCtrl">     <!-- Tell Angular to use our ItemCtrl here -->
+            <div class="page-header"><h1>Items</h1></div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="well">
+                        <div class="form-group">
+                            <input type="text"   class="form-control" ng-model="newItem.name" placeholder="Name">       <!-- Tell Angluar to create a new object called newItem on $scope and tie this input field to the name property -->
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control" ng-model="newItem.qty" placeholder="Qty">         <!-- Tie this input field to the qty property of newItem -->
+                        </div>
+                        <div class="text-center">
+                            <input type="button" class="btn btn-primary" ng-click="addItem()" value="Add Item" ng-disabled="!newItem.name || !newItem.qty">         <!-- Our button calls addItem() on $scope -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+        			<div class="panel panel-info">
+        				<div class="panel-heading">
+        					<h3 class="panel-title">Items</h3>
+        				</div>
+        				<table class="table">
+                            <tr>
+                                <th>Name</th>
+                                <th>Qty</th>
+                            </tr>
+        					<tr ng-repeat="item in items">        <!-- Loop through items -->
+        						<td>{{item.name}}</td>
+        						<td>{{item.qty}}</td>
+        					</tr>
+        				</table>
+        			</div>
+                </div>
+            </div>
+		</div>
+	</body>
+</html>
