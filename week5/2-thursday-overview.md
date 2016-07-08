@@ -48,3 +48,11 @@ Item.findOneAndUpdate({sku:'icecream'}, {qty:5}).exec().then(function(item) {
 ```
 
 Notice that when we use `findOneAndUpdate()` we don't have access to the document before the update, meaning that we can't do things like increase/decrease the qty.
+
+ngInclude and ngView
+--------------------
+**TODO**
+
+Hit List
+--------
+Check out [examples/hitList](https://github.com/sergei202/okcoders-class/tree/master/week5/examples/hitList) for the in-class example we did.  This example covers what we learned Tuesday plus how to load and update an existing record.

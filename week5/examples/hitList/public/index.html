@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hit List App</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.min.js"></script>
+		<script type="text/javascript">
+			var app = angular.module('crud', []);
+			app.controller('HitList', function($scope,$http) {
+				$scope.btnLabel = 'Add Hit';						// Our button will have a default lael
+				function getHits() {								// getHits() will load the hits list from the server and set $scope.hits for us
+					$http.get('/hits').then(function(response) {
+						$scope.hits = response.data;
+					});
+				}
+				getHits();											// Immediately load the hits list
+
+				$scope.addHit = function() {						// Our button handler.  Note: We should probably have called it saveHit() since it's used both for creating and updating.
+					$http.post('/hits', $scope.newHit).then(function(response) {		// Post $scope.newHit to our /hits POST route and then...
+						console.log('post /hits: ', response.data);
+						getHits();									// Reload our list
+					});
+					$scope.btnLabel = 'Add Hit';					// Set btnLabel back to default in case this was an update
+					$scope.newHit = {};								// Clear newHit so are form fields are cleared
+				};
+
+				$scope.loadHit = function(hit) {					// Our scope function to load a hit record into newHit
+					$scope.btnLabel = 'Update Hit';					// Update btnLabel appropriately
+					$scope.newHit = angular.copy(hit);				// Create a clone copy of the record passed (so it doesn't update the table row as we change the input data)
+				};
+			});
+		</script>
+	</head>
+	<body ng-app="crud">
+		<div class="container" ng-controller="HitList">
+			<div class="page-header">
+				<h1>The List</h1>
+			</div>
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Add Item</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-sm-4">
+							<form name="hitForm">
+								<div class="form-group">
+									<label>Name</label>
+									<input class="form-control" ng-model="newHit.name" required>
+								</div>
+								<div class="form-group">
+									<label>Bountry</label>
+									<input type="number" class="form-control" ng-model="newHit.bounty" required min=0 step=100>
+								</div>
+								<div class="form-group">
+									<label>Last Known Location</label>
+									<input class="form-control" ng-model="newHit.location">
+								</div>
+								<div class="form-group">
+									<label>Contractor</label>
+									<input class="form-control" ng-model="newHit.contractor">
+								</div>
+								<div class="btn btn-block btn-primary" ng-click="addHit()" ng-disabled="!hitForm.$valid">{{btnLabel}}</div>
+							</form>
+						</div>
+						<div class="col-sm-8">
+							<table class="table">
+								<tr>
+									<th>Name</th>
+									<th>Location</th>
+									<th>Contractor</th>
+									<th>Bounty</th>
+									<th>Status</th>
+								</tr>
+								<tr ng-repeat="hit in hits" ng-click="loadHit(hit)">		<!-- We call $scope.loadHit(hit) with hit being the displayed row that was clicked on -->
+									<td>{{hit.name}}</td>
+									<td>{{hit.location}}</td>
+									<td>{{hit.contractor}}</td>
+									<td>{{hit.bounty | currency}}</td>
+									<td>{{hit.status}}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
