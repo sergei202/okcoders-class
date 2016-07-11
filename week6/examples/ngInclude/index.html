@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ngInclude AngularJS Example</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">	<!-- Include Bootstrap -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>			<!-- Include Angular -->
+    </head>
+    <body ng-app>			<!-- Initialize Angular without a module attached -->
+
+		<div class="container"> 				 		 	<!-- a container class puts margins to the left and right of our body -->
+
+			<div ng-include="'header.html'"></div>			<!-- Include the markup in header.html -->
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Example Panel Title</h3>    <!-- Our panel title -->
+                </div>
+                <div class="panel-body">                                <!-- Our app markup with live here -->
+                    Note how in header.html that we don't have to include Bootstrap again or create another <pre style="display:inline">&lt;body&gt;</pre> tag or anything like that.
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
