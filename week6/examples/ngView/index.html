@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ngView Pet Example</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">	<!-- Include Bootstrap -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>			<!-- Include Angular -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.min.js"></script>    <!-- Include ngRoute -->
+        <script>
+            var app = angular.module('petApp', ['ngRoute']);            // Define our petApp module with ngRoute as a dependency
+
+            app.config(function($routeProvider, $locationProvider) {
+                $routeProvider
+                    .when('/pet/cat', {                                 // Define a route '/pet/cat' that will use cat.html and CatCtrl
+                        templateUrl: 'cat.html',
+                        controller: 'CatCtrl'
+                    })
+                    .when('/pet/dog', {                                 // Define a route '/pet/dog' that will use dog.html and no controller
+                        templateUrl: 'dog.html'
+                    })
+                    .when('/pet/ferret', {                              // Define a route '/pet/ferret' that will use ferret.html and no controller
+            			templateUrl: 'ferret.html'
+            		})
+                    .otherwise('/pet/cat');                             // Define the default route as /pet/cat
+            });
+
+            app.controller('CatCtrl', function($scope) {                // Define a CatCtrl controller and inject $scope
+                $scope.images = [
+                    'http://i.dailymail.co.uk/i/pix/2015/10/20/01/2D92587600000578-3280211-So_hot_right_meow_A_Japanese_housewife_creates_handmade_cat_purs-m-62_1445301682918.jpg',
+                    'https://pbs.twimg.com/profile_images/616542814319415296/McCTpH_E.jpg',
+                    'http://cdn2.business2community.com/wp-content/uploads/2014/10/Cat-Dressed-as-a-Bunny-For-Halloween.jpg.jpg',
+                    'http://upaws.org/wp-content/uploads/2014/01/cats-in-a-row.jpg'
+                ];
+            });
+        </script>
+    </head>
+    <body ng-app="petApp">			                                        <!-- Initialize Angular without a module attached -->
+
+		<div class="container">
+
+			<div ng-include="'header.html'"></div>			                <!-- Include the markup in header.html -->
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Select Your Favorite Pet</h3>
+                </div>
+                <div class="panel-body">                                    <!-- Our app markup with live here -->
+
+                    <div class="row">
+
+                        <div class="col-sm-2">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="#/pet/cat">Cat</a></li>        <!-- Create some links to our different routes -->
+                                <li><a href="#/pet/dog">Dog</a></li>
+                                <li><a href="#/pet/ferret">Ferret</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-sm-10">
+                            <div ng-view></div>                             <!-- The current view and controller will be placed inside the ng-view directive -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
