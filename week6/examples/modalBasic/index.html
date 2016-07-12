@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Basic Modal Example</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">	<!-- Include Bootstrap -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>			<!-- Include Angular -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
+		<script>
+            var app = angular.module('modalApp', ['ui.bootstrap']);            // Define our modalApp module with ui.bootstrap as a dependency
+
+			app.controller('ExampleCtrl', function($scope,$uibModal) {
+
+				$scope.example1 = function() {
+					$uibModal.open({									// Create a bare moda lwith some HTML
+						template: '<h1>Inline template example</h1>'	// Note that the property is called 'template' and it takes a HTML string
+					});
+				};
+
+				$scope.example2 = function() {
+					$uibModal.open({									// Create a modal using a template file
+						templateUrl: 'modalBasic.html'					// Note that the property is 'templateUrl' and the value is a filename
+					});
+				};
+
+				$scope.example3 = function() {
+					$uibModal.open({									// Create a modal using a template file
+						templateUrl: 'modalList.html',
+						controller: function($scope,$uibModalInstance) {		// We can define a separate controller for our modal.  Note ethat we inject $uibModalInstance as well as $scope
+							$scope.items = [];
+
+							$scope.addItem = function() {
+								$scope.items.push($scope.itemName);
+								$scope.itemName = '';
+							};
+
+							$scope.close = $uibModalInstance.dismiss;		// We tell $scope.close to call $uibModalInstance.dismiss
+						}
+					});
+				};
+			});
+        </script>
+    </head>
+    <body ng-app="modalApp">			                                        <!-- Initialize Angular without a module attached -->
+
+		<div class="container" ng-controller="ExampleCtrl">
+
+			<div class="page-title">
+				<h1>Basic Modal Example</h1>
+			</div>
+
+			<button class="btn btn-primary" ng-click="example1()">Base Modal Example</button>
+			<button class="btn btn-primary" ng-click="example2()">Basic Modal Example</button>
+			<button class="btn btn-primary" ng-click="example3()">Modal List Example</button>
+        </div>
+    </body>
+</html>

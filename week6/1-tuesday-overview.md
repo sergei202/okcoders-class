@@ -61,6 +61,43 @@ app.config(function($routeProvider, $locationProvider) {
 Check out the full example in [ngView](https://github.com/sergei202/okcoders-class/tree/master/week6/examples/ngView).  Pay attention to the address bar as you select different pets.
 
 
-UI Bootstrap and Modals
------------------------
-TODO
+UI Bootstrap
+------------
+
+[UI Bootstrap](https://angular-ui.github.io/bootstrap) is a group of angular add-ons that use empower bootstrap.  Some examples:
+- [Dynamic Tooltips](https://angular-ui.github.io/bootstrap/#/tooltip)
+- [Tabs](https://angular-ui.github.io/bootstrap/#/tabs)
+- [Image Carousel](https://angular-ui.github.io/bootstrap/#/carousel)
+- [Dropdown Buttons](https://angular-ui.github.io/bootstrap/#/dropdown)
+- [Modals](https://angular-ui.github.io/bootstrap/#/modal)
+
+We'll use some of these in class, but we are going to start with modals.
+
+Modals
+------
+
+What is a modal?  A modal is like a Javascript `alert()` pop-up but on steriods:
+- It is **non-blocking**, meaning your app continues to run while it is open
+- It is a full view + controller, meaning you can put anything you want in it
+- It supports animations and is completely themeable
+
+Before we can use modals, we need to include the `ui-bootstrap` and `ui-bootstrap-tpls` sources:
+```html
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
+```
+We have to tell our angular module to use the `ui.bootstrap` module:
+```js
+var app = angular.module('modalApp', ['ui.bootstrap']);            // Define our modalApp module with ui.bootstrap as a dependency
+```
+
+We need to inject the `$uibModal` service into our controller and then we can call `$uibModal.open()` to open a modal:
+```js
+app.controller('ExampleCtrl', function($scope,$uibModal) {
+	$uibModal.open({									// Create a modal using a template file
+		templateUrl: 'modalBasic.html'					// Note that the property is 'templateUrl' and the value is a filename
+	});
+});
+```
+
+Play around with the [modalBasic](https://github.com/sergei202/okcoders-class/tree/master/week6/examples/modalBasic) examples.

@@ -1,0 +1,22 @@
+<div class="modal-header">
+   <h3 class="modal-title">Modal List Example</h3>
+</div>
+<div class="modal-body">
+
+    <div class="row form-group">
+        <div class="col-sm-6">
+            <input type="text" class="form-control" ng-model="itemName">
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-info" ng-click="addItem()" ng-disabled="!itemName">Add Item</button>
+        </div>
+    </div>
+    <ul>
+        <li ng-repeat="item in items">
+            {{item}}
+        </li>
+    </ul>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="close()">Close</button>
+</div>
