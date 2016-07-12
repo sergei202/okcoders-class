@@ -100,4 +100,42 @@ app.controller('ExampleCtrl', function($scope,$uibModal) {
 });
 ```
 
+`$uibModal.open()` options also allow us to specify a controller function.  This means that `$uibModal` will automatically inject `ng-controller` for us, allowing us access to `$scope`.
+
+```js
+app.controller('ExampleCtrl', function($scope,$uibModal) {
+	$uibModal.open({									// Create a modal using a template file
+		templateUrl: 'modalList.html',
+		controller: function($scope) {					// Define a controller function and inject $scope
+			$scope.name = 'Sergei';
+			$scope.items = [1,2,3,4,5];
+		}
+	});
+});
+```
+
 Play around with the [modalBasic](https://github.com/sergei202/okcoders-class/tree/master/week6/examples/modalBasic) examples.
+
+
+Modal Result
+------------
+How can we get a value returned from a modal?  With Promises! Because modals are asynchronous, `$uibModal.open()` returns an object with a `result` property that is a Promise.
+Let's see this in action:
+
+```js
+app.controller('ExampleCtrl', function($scope,$uibModal) {
+	var modalInstance = $uibModal.open({									// Create a modal using a template file
+		templateUrl: 'modalList.html',
+		controller: function($scope,$uibModalInstance) {					// Define a controller function and inject $scope and uibModalInstance
+			$scope.name = 'Sergei';
+			$scope.items = [1,2,3,4,5];
+			$scope.close = function() {
+				$uibModalInstance.close($scope.items);						// result Promise will resolve to $scope.items
+			};
+		}
+	});
+	modalInstance.result.then(function(items) {			// Promise is resolved to whatever is passed to $uibModalInstance.close()
+		console.log('items = ', items);
+	});
+});
+```
