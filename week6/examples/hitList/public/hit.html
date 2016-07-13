@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3 class="modal-title">Add Hit</h3>
+</div>
+
+<div class="modal-body">
+	<form name="hitForm">
+		<div class="form-group">
+			<label>Name</label>
+			<input class="form-control" ng-model="hit.name" required>
+		</div>
+		<div class="form-group">
+			<label>Bountry</label>
+			<input type="number" class="form-control" ng-model="hit.bounty" required min=0 step=100>
+		</div>
+		<div class="form-group">
+			<label>Last Known Location</label>
+			<input class="form-control" ng-model="hit.location">
+		</div>
+		<div class="form-group">
+			<label>Contractor</label>
+			<input class="form-control" ng-model="hit.contractor">
+		</div>
+	</form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-danger pull-left" type="button" ng-click="delete()" ng-if="hit._id">Delete</button>
+    <button class="btn btn-primary" type="button" ng-click="save()" ng-disabled="!hitForm.$valid">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

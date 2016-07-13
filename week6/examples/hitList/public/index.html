@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hit List App</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
+			<script type="text/javascript">
+			var app = angular.module('hitList', ['ui.bootstrap']);
+
+			app.controller('HitListCtrl', function($scope,$http,$uibModal) {
+				function getHits() {								// getHits() will load the hits list from the server and set $scope.hits for us
+					$http.get('/hits').then(function(response) {
+						$scope.hits = response.data;
+					});
+				}
+				getHits();											// Immediately load the hits list
+
+				$scope.loadHit = function(hit) {					// loadHit() will open a modal with HitCtrl, pass 'hit', and then call getHits() after it closes
+					var modalInstance = $uibModal.open({			// TODO: Comment without variable
+						templateUrl: 'hit.html',
+						controller: 'HitCtrl',
+						resolve: {
+							hitItem: function() {return hit;}		// Inject our 'hit' variable as 'hitItem'
+						}
+					});
+					modalInstance.result.then(function() {			// This executes after $uibModalInstance.close() is called from HitCtrl
+						getHits();
+					});
+				};
+			});
+
+			// This is the controller that our hit modal uses.  This is called using loadHit() above
+			app.controller('HitCtrl', function($scope,$uibModal,$uibModalInstance,$http, hitItem) {		// Inject our dependencies and hitItem (the item we are editing)
+				console.log('HitCtrl hitItem=', hitItem);
+				$scope.hit = hitItem;
+
+				$scope.save = function() {
+					$http.post('/hits', $scope.hit).then(function(response) {		// Post $scope.hit to our /hits POST route and then...
+						console.log('post /hits: ', response.data);
+						$uibModalInstance.close();
+					});
+				};
+
+				$scope.cancel = function() {
+					$uibModalInstance.dismiss();
+				};
+
+				$scope.delete = function() {
+					var deleteModalInstance = $uibModal.open({					// We create a new modal to confirm if the user really wants to delete
+						templateUrl: 'confirm.html',
+						controller: function($scope,$uibModalInstance) {
+							$scope.yes = function() {
+								$uibModalInstance.close();						// We resolve the promise
+							};
+							$scope.no = function() {
+								$uibModalInstance.dismiss();					// We reject the promise
+							};
+						}
+					});
+					deleteModalInstance.result.then(function() {				// We only delete if the result promise is resolved, meaning the user clicked yes
+						$http.delete('/hits/' + $scope.hit._id).then(function() {
+							$uibModalInstance.close();
+						});
+					});
+				};
+			});
+		</script>
+	</head>
+	<body ng-app="hitList">
+		<div class="container" ng-controller="HitListCtrl">
+			<div class="page-header">
+				<h1>The List</h1>
+			</div>
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Add Item</h3>
+				</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<tr>
+							<th>Name</th>
+							<th>Location</th>
+							<th>Contractor</th>
+							<th>Bounty</th>
+							<th>Status</th>
+							<th class="text-right">
+								<a href ng-click="loadHit()"><span class="glyphicon glyphicon-plus"></span></a>		<!-- Calling loadHit() without passing a hit object means it is a new item -->
+							</th>
+						</tr>
+						<tr ng-repeat="hit in hits">
+							<td>{{hit.name}}</td>
+							<td>{{hit.location}}</td>
+							<td>{{hit.contractor}}</td>
+							<td>{{hit.bounty | currency}}</td>
+							<td>{{hit.status}}</td>
+							<td class="text-right">
+								<a href ng-click="loadHit(hit)"><span class="glyphicon glyphicon-pencil"></span></a>
+							</td>
+						</tr>
+						<tr ng-if="!hits.length">
+							<td colspan=6 class="text-danger text-center">No Hits</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
