@@ -34,7 +34,7 @@ Hit List Example
 Let's change our current Hit List app and make some improvements with what we've learned:
 
 - Since the top 4 major contractors all use our app, let's change the Hit Contractor (text right now) to be a dropdown
-- Let's let hitmen (hit-persons?) make *bids* on each hit
+- Let's allow hitmen to make *bids* on each hit
 
 ### Following Along
 I created a [hitList github repo](https://github.com/sergei202/hitList) to make it easier to follow along.
@@ -130,6 +130,7 @@ We now have all the back-end code done to be able to list the contractors on the
 You can checkout the `contractor-backend` tag to jump to this point in the tutorial:
 ```bash
 # From the hitList directory that you cloned at the beginning
+git checkout master
 git pull
 git checkout -b contractor-backend contractor-backend
 ```
@@ -138,6 +139,249 @@ git checkout -b contractor-backend contractor-backend
 Our Hit modal currently looks like this:
 ![Hit Modal: Before](hitlist-hit-modal-before.png)
 
-Let's add a `<select>` dropdown to list all the contractors
+Let's replace the Contractor text field with a `<select>` dropdown to list all the contractors.
 
-[WIP]
+Before we add the select dropdown, let's use angular's `$http.get()` to get the list from our server, we do this in our `HitCtrl` (the controller the modal is bound to).
+
+```js
+$http.get('/contractors').then(function(res) {			// GET /contractors
+	$scope.contractors = res.data;						// Assign the list to $scope.contractors
+});
+```
+We can now remove the text field and add the select dropdown to our `hit.html` markup.  We discussed two different ways to do this in class:
+- Create a `<select>` and `ng-repeat` the `<option>`s
+- Use `ng-options`
+
+Let's see both examples:
+
+```html
+<select class="form-control" ng-model="hit.contractor" required>						<!-- Our select is bound to hit.contractor -->
+	<option ng-repeat="con in contractors" value="{{con._id}}">{{con.name}}</option>	<!-- We ng-repeat our option tag and assign the value to _id and use name as the option label -->
+</select>
+```
+
+[`ng-options`](https://docs.angularjs.org/api/ng/directive/ngOptions) is more compact but slightly less obvious what is going on:
+
+```html
+<select class="form-control" ng-model="hit.contractor" ng-options="con._id as con.name for con in contractors" required></select>
+```
+
+Let's breakdown the `ng-options`: `[value] as [label] for [item] in [array]`.  We see that we are doing exactly what we did when we manually `ng-repeat`ed through our `contractor` array, our `<option>` value is `con._id`, our label is `con.name`, and we loop through the `contractors` array and use `con` as the local item.
+
+Both methods have the same result:
+
+![Hit Modal: After](hitlist-hit-modal-after.png)
+
+#### Populating `hit.contractor`
+
+We are halfway there!  But now our list looks like this:
+
+![Hit List: Before](hitlist-list-before.png)
+
+The contractor's `ObjectId` won't do much good to our users, let's replace it with the contractor's name and image.
+
+The first thing we need to do is change the `contractor` property in our `Hit` model from a string to an `ObjectId` with a `ref`erence to the `Contractor` model.  This allows mongoose to know model to use when populating.
+
+```js
+var mongoose = require('mongoose');
+
+module.exports = mongoose.model('Hit', {									// Create a model called Hit and export it
+	name: String,
+	bounty: Number,
+	location: String,
+	contractor: {type:mongoose.Schema.Types.ObjectId, ref:'Contractor'},	// contractor is an ObjectId that references the Contractor model
+	status: String
+});
+```
+
+We can now tell mongoose to populate the `contractor` property in our `/hits` route.  Our query goes from `Hit.find().sort({bounty:-1}).exec()` to `Hit.find().populate('contractor').sort({bounty:-1}).exec()`.
+
+```js
+app.get('/hits', function(req,res) {													// Return all the hits in the Hit models (the hits collection)
+	Hit.find().populate('contractor').sort({bounty:-1}).exec().then(function(hits) {	// Find all hits, populate contractor, sort by bounty descending, execute, and then...
+		res.json(hits);																	// Return the hits array
+	});
+});
+```
+
+Notice that all we did was add `.populate('contractor')` to our query!  Mongoose handles the rest for us.  Our `contractor` property in each document will no longer be an `ObjectId` but it will be the matching document from the `contractors` collection.  We can verify this by refreshing our client-side:
+
+![Hit List: Contractor Objects](hitlist-list-object.png)
+
+We can now go and change our markup in `index.html` to use the new data that became available.  Our `<td>{{hit.contractor}}</td>` will be replaced with:
+
+```html
+<td>
+	<img class="img-thumbnail pull-left" ng-src="{{hit.contractor.image}}" style="width:80px; margin-right:10px;"> <!-- Add a small image, pulled right, with the src being contractor.image -->
+	{{hit.contractor.name}}
+</td>
+```
+
+Our list now looks like this.  I think we are done with the Contractor task!
+
+![Hit List: After](hitlist-list-after.png)
+
+#### Following Along
+You can checkout the `contractor-frontend` tag to jump to this point in the tutorial:
+```bash
+# From the hitList directory that you cloned at the beginning
+git checkout master
+git pull
+git checkout -b contractor-frontend contractor-frontend
+```
+
+### Bids
+We want to allow hitmen to make bids on the hits listed, similar to comments made on blog posts.  
+We'll only collect their name, bid amount, and days to complete the job.
+
+#### Add Bids to Hit Model
+Let's make the changes to our `Hit` model to support this new functionality.  We want to add a `bids` array of `bid` objects:
+
+```js
+bids: [{
+	name: String,			// The bidder's name
+	amount: Number,			// The bid amount
+	days: Number			// Number of days to complete the job
+}]
+```
+
+Our `hit.js` now looks like this:
+
+```js
+var mongoose = require('mongoose');
+
+module.exports = mongoose.model('Hit', {									// Create a model called Hit and export it
+	name: String,
+	bounty: Number,
+	location: String,
+	contractor: {type:mongoose.Schema.Types.ObjectId, ref:'Contractor'},	// contractor is an ObjectId that references the Contractor model
+	status: String,
+	bids: [{
+		name: String,			// The bidder's name
+		amount: Number,			// The bid amount
+		days: Number			// Number of days to complete the job
+	}]
+});
+```
+
+#### Bid Modal
+Let's create a Bid modal to collect the data.  We're just going to copy and modify our `hit.html` modal and save it as `bid.html`:
+
+```html
+<div class="modal-header">
+    <h3 class="modal-title">Add Bid</h3>
+</div>
+
+<div class="modal-body">
+	<form name="bidForm">
+		<div class="form-group">
+			<label>Name</label>
+			<input class="form-control" ng-model="bid.name" required>
+		</div>
+		<div class="form-group">
+			<label>Bid Amount</label>
+			<input type="number" class="form-control" ng-model="bid.amount" required min=0 step=100>
+		</div>
+		<div class="form-group">
+			<label>Days to Complete Job</label>
+			<input type="number" class="form-control" ng-model="bid.days" required min=0 step=1>
+		</div>
+	</form>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-danger pull-left" type="button" ng-click="delete()" ng-if="bid._id">Delete</button>
+    <button class="btn btn-primary" type="button" ng-click="save()" ng-disabled="!bidForm.$valid">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>
+```
+
+Let's add a `Add Bid` button and write up it's handler in our `HitListCtrl`.
+Since we're not using the `Status` column, let's re-purpose it for bids:
+
+```html
+<td>
+	<button class="btn btn-warning btn-sm" ng-click="addBid(hit)">Add Bid</button>
+</td>
+```
+
+Notice that the `ng-click` handler passes `hit` (created in our `ng-repeat` of `hits`).  We need to pass the `hit` object so we know where to add the bid.
+
+Let's create our handler for `addBid()`.  We'll just copy our `loadHit()` handler and modify it a bit:
+
+```js
+$scope.addBid = function(hit) {					// addBid() will open a modal with BidCtrl, pass 'hit', and then call getHits() after it closes
+	var modalInstance = $uibModal.open({
+		templateUrl: 'bid.html',
+		controller: 'BidCtrl',
+		resolve: {
+			hitItem: function() {return hit;}		// Inject our 'hit' variable as 'hitItem'
+		}
+	});
+	modalInstance.result.then(function() {			// This executes after $uibModalInstance.close() is called from HitCtrl
+		getHits();
+	});
+};
+```
+
+Our `BidCtrl` will again be copied from `HitCtrl` and modified:
+
+```js
+app.controller('BidCtrl', function($scope,$uibModal,$uibModalInstance,$http, hitItem) {		// Inject our dependencies and hitItem (the item we are editing)
+	console.log('BidCtrl hitItem=', hitItem);
+	$scope.save = function() {
+		hitItem.bids.push($scope.bid);									// Push the current bid onto the bids array in hitItem
+		$http.post('/hits', hitItem).then(function(response) {			// Post hitItem to our /hits POST route and then...
+			console.log('post /hits: ', response.data);
+			$uibModalInstance.close();
+		});
+	};
+
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss();
+	};
+});
+```
+
+Notice that the only major change is that on `save()` we `push()` the current bid (`$scope.bid`) onto `hitItem.bids`.
+Remember that `hitItem` is the hit that we originally passed to `addBid()` and was injected into our modal with `resolve`.
+
+Let's add a test bid.  Nothing will show up on the front-end yet, but we can confirm it got added by going to `http://localhost:8080/hits`:
+
+![Hit List: Bid JSON](hitlist-bid-json.png)
+
+All that's left is displaying the bids in our list of hits!
+
+#### Display Hit Bids
+For the sake of simplicity, let's display the bids in the same `<td>` as the 'Add Bid' button.  We've create a table and `ng-repeat` through them:
+
+```html
+<table class="table table-condensed">
+	<tr>
+		<th>Bidder</th>
+		<th class="text-right">Amount</th>
+		<th class="text-right">Days</th>
+	</tr>
+	<tr ng-repeat="bid in hit.bids">
+		<td>{{bid.name}}</td>
+		<td class="text-right">{{bid.amount | currency}}</td>
+		<td class="text-right">{{bid.days}}</td>
+	</tr>
+</table>
+```
+This is what we get:
+
+![Hit List: Ugly Bids](hitlist-bids-ugly.png)
+
+Not very pretty.  Let's convert our button into a glyph and move it to the last column with the other glyphs.  Let's also add a row when there are no bids with some helper text.
+
+![Hit List: Less Ugly Bids](hitlist-bids-better.png)
+
+#### Following Along
+You can checkout the `bids` tag to jump to this point in the tutorial:
+```bash
+# From the hitList directory that you cloned at the beginning
+git checkout master
+git pull
+git checkout -b bids bids
+```
