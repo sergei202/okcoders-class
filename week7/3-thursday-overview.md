@@ -186,3 +186,31 @@ Because `filter` expects an expression, we can pass a scope variable tied to an 
 ```
 
 See [examples/filtering/filtering1.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/filtering/filtering1.html) for an example of the above.
+
+Let's add another property called `category` to our dataset and filter by it using a dropdown:
+
+```js
+$scope.categories = ['toys', 'people', 'cities'];		// Define our options for our category dropdown
+
+$scope.items = [
+	{id:1,	name:'First Item',		color:'red',	size:'large',		category:'toys'},
+	{id:2,	name:'Second Item',		color:'green',	size:'small',		category:'people'},
+	{id:3,	name:'Third Item',		color:'blue',	size:'medium',		category:'toys'},
+	{id:4,	name:'Fourth Item',		color:'while',	size:'tiny',		category:'people'},
+	{id:5,	name:'Fifth Item',		color:'black',	size:'huge',		category:'cities'},
+	{id:6,	name:'Sixth Item',		color:'gray',	size:'maximum',		category:'cities'},
+	{id:7,	name:'Seventh Item',	color:'orange',	size:'minimum',		category:'people'},
+	{id:8,	name:'Eighth Item',		color:'purple',	size:'gigantic',	category:'people'},
+	{id:9,	name:'Ninth Item',		color:'brown',	size:'pico',		category:'toys'},
+	{id:10,	name:'Tenth Item',		color:'pink',	size:'nano',		category:'toys'}
+];
+```
+
+```html
+<input class="form-control" ng-model="searchObj.$">
+<select class="form-control" ng-model="searchObj.category" ng-options="o as o for o in categories"></select>
+...
+<tr ng-repeat="item in items | filter:searchObj">
+```
+
+See [examples/filtering/filtering2.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/filtering/filtering2.html) for an example of the above.

@@ -35,21 +35,21 @@
 					<h3 class="panel-title">Items</h3>
 				</div>
 
-                <form class="form-inline">
-                    <div class="panel-body">
+                <div class="panel-body">
+					<form class="form-inline">
                         <div class="form-group">
                             <labe>Search: </label>
                             <input class="form-control" ng-model="searchText">
                         </div>
-                    </div>
-                </form>
+                    </form>
+				</div>
 
 				<table class="table">
 					<tr>
-						<th class="col-sm-2">ID<span ng-class="sortIcon('id')"></a></th>               <!-- ng-class dynamically creates a class attribute with whatever the sortIcon() returns -->
-						<th class="col-sm-4">Name<span ng-class="sortIcon('name')"></a></th>
-						<th class="col-sm-3">Color<span ng-class="sortIcon('color')"></a></th>
-						<th class="col-sm-3">Size<span ng-class="sortIcon('size')"></a></th>
+						<th class="col-sm-2">ID></th>               <!-- ng-class dynamically creates a class attribute with whatever the sortIcon() returns -->
+						<th class="col-sm-4">Name</th>
+						<th class="col-sm-3">Color</th>
+						<th class="col-sm-3">Size</th>
 					</tr>
                     <tr ng-repeat="item in items | filter:searchText">
                         <td>{{item.id}}</td>
