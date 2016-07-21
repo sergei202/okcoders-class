@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Filtering Example</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);
+            angular.module('myApp').controller('MainCtrl', function($scope) {
+
+				$scope.items = [
+					{id:1,	name:'First Item',		color:'red',	size:'large'},
+					{id:2,	name:'Second Item',		color:'green',	size:'small'},
+					{id:3,	name:'Third Item',		color:'blue',	size:'medium'},
+					{id:4,	name:'Fourth Item',		color:'while',	size:'tiny'},
+					{id:5,	name:'Fifth Item',		color:'black',	size:'huge'},
+					{id:6,	name:'Sixth Item',		color:'gray',	size:'maximum'},
+					{id:7,	name:'Seventh Item',	color:'orange',	size:'minimum'},
+					{id:8,	name:'Eighth Item',		color:'purple',	size:'gigantic'},
+					{id:9,	name:'Ninth Item',		color:'brown',	size:'pico'},
+					{id:10,	name:'Tenth Item',		color:'pink',	size:'nano'}
+				];
+            });
+        </script>
+    </head>
+
+    <body ng-app="myApp">
+        <div class="container" ng-controller="MainCtrl">
+
+			<div class="page-header">
+				<h1>Filtering Example</h1>
+			</div>
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Items</h3>
+				</div>
+
+                <form class="form-inline">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <labe>Search: </label>
+                            <input class="form-control" ng-model="searchText">
+                        </div>
+                    </div>
+                </form>
+
+				<table class="table">
+					<tr>
+						<th class="col-sm-2">ID<span ng-class="sortIcon('id')"></a></th>               <!-- ng-class dynamically creates a class attribute with whatever the sortIcon() returns -->
+						<th class="col-sm-4">Name<span ng-class="sortIcon('name')"></a></th>
+						<th class="col-sm-3">Color<span ng-class="sortIcon('color')"></a></th>
+						<th class="col-sm-3">Size<span ng-class="sortIcon('size')"></a></th>
+					</tr>
+                    <tr ng-repeat="item in items | filter:searchText">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.color}}</td>
+                        <td>{{item.size}}</td>
+                    </tr>
+                </table>
+	        </table>
+
+		</div>
+    </body>
+
+</html>

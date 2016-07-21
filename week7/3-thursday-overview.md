@@ -18,7 +18,7 @@ Let's go over some of the highlights of each method:
 - Pagination is easy to setup
 
 
-### Client-side Sorting/Filtering
+### Client-side Sorting
 Angular *filters* (we've already seen the `date` filter) allow us to easily add sorting and filtering to any of our `ng-repeat` directives.
 
 Let's create a fictional dataset and add it to scope.  This is just an array of items, like we would get from our server-side mongo queries.
@@ -63,7 +63,7 @@ Let's order our example dataset, `$scope.items`, by the `color` property:
 <tr ng-repeat="item in items | orderBy:'color'">
 ```
 
-See [examples/sorting-filtering/sorting1.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting-filtering/sorting1.html) for a example of sorting by a given property.  Play around with different properties.
+See [examples/sorting/sorting1.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting/sorting1.html) for a example of sorting by a given property.  Play around with different properties.
 
 Notice that the first argument to the `orderBy` filter (colons separate arguments for filters) is in single quotes.  This tells us that it takes an `expression`.  This means we can give it a scope variable instead of hardcoding a value!
 
@@ -82,7 +82,7 @@ Let's add a `<input>` tag that is bound to the scope variable `mySortProp`:
 </table>
 ```
 
-We can now type whatever property we want our table sorted by!  Check out [examples/sorting-filtering/sorting2.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting-filtering/sorting2.html) for an example of this.  Try typing in `id`, `name`, `size`, or `-color`.  Adding a hyphen in front reverses the sort order.
+We can now type whatever property we want our table sorted by!  Check out [examples/sorting/sorting2.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting/sorting2.html) for an example of this.  Try typing in `id`, `name`, `size`, or `-color`.  Adding a hyphen in front reverses the sort order.
 
 Let's go a step further and give the user a dropdown (a `<select>` box) to pick the sort field and another for the direction:
 
@@ -108,7 +108,7 @@ $scope.sortDirs = [					// Sort directions
 ];
 ```
 
-See [examples/sorting-filtering/sorting3.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting-filtering/sorting3.html) for an example of the above.
+See [examples/sorting/sorting3.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting/sorting3.html) for an example of the above.
 
 Can we do better?  How about adding table headers and making them clickable!
 
@@ -167,4 +167,22 @@ Lastly, let's add column classes on our `<th>`s to prevent them from changing wi
 </tr>
 ```
 
-Check out the final sorting example: [examples/sorting-filtering/sorting4.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting-filtering/sorting4.html).
+Check out the final sorting example: [examples/sorting/sorting4.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting/sorting4.html).
+
+### Client-side Filtering
+
+Angular provides a `filter` filter that takes a string or object to filter by.  Let's say we want to find all the items that have the string `in` in them:
+
+```html
+<tr ng-repeat="item in items | filter:'in'">
+```
+
+Because `filter` expects an expression, we can pass a scope variable tied to an `<input>` field instead:
+
+```html
+<input class="form-control" ng-model="searchText">
+...
+<tr ng-repeat="item in items | filter:searchText">
+```
+
+See [examples/filtering/filtering1.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/filtering/filtering1.html) for an example of the above.
