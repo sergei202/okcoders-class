@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Basic Sorting Example</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);
+            angular.module('myApp').controller('MainCtrl', function($scope) {
+            	$scope.items = [
+					{id:1,	name:'First Item',		color:'red',	size:'large'},
+					{id:2,	name:'Second Item',		color:'green',	size:'small'},
+					{id:3,	name:'Third Item',		color:'blue',	size:'medium'},
+					{id:4,	name:'Fourth Item',		color:'while',	size:'tiny'},
+					{id:5,	name:'Fifth Item',		color:'black',	size:'huge'},
+					{id:6,	name:'Sixth Item',		color:'gray',	size:'maximum'},
+					{id:7,	name:'Seventh Item',	color:'orange',	size:'minimum'},
+					{id:8,	name:'Eighth Item',		color:'purple',	size:'gigantic'},
+					{id:9,	name:'Ninth Item',		color:'brown',	size:'pico'},
+					{id:10,	name:'Tenth Item',		color:'pink',	size:'nano'}
+				];
+            });
+        </script>
+    </head>
+
+    <body ng-app="myApp">
+        <div ng-controller="MainCtrl">
+			<table>
+				<tr ng-repeat="item in items | orderBy:'color'">
+					<td>{{item.id}}</td>
+					<td>{{item.name}}</td>
+					<td>{{item.color}}</td>
+					<td>{{item.size}}</td>
+				</tr>
+			</table>
+		</div>
+    </body>
+
+</html>
