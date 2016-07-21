@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fancy Sorting Example</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script>
+            angular.module('myApp', []);
+            angular.module('myApp').controller('MainCtrl', function($scope) {
+				$scope.setSort = function(prop) {
+                    if($scope.sortProp===prop) {        // If the sort property is already set to prop (meaning we clicked on the same header), reverse the order and return
+                        $scope.sortReverse = true;
+                        return;
+                    }
+                    $scope.sortProp = prop;
+                    $scope.sortReverse = false;         // Reset sortReverse to false
+                };
+
+                $scope.sortIcon = function(prop) {              // Checks to see if prop is the current sort prop and returns a glyph for that sort direction
+                    if($scope.sortProp!==prop) return null;     // If sortProp isn't prop, return null
+                    if($scope.sortReverse===false) return 'glyphicon glyphicon-arrow-down';     // If not reversed, show down arrow
+                    if($scope.sortReverse===true)  return 'glyphicon glyphicon-arrow-up';       // If reversed, show up arrow
+                };
+
+				$scope.items = [
+					{id:1,	name:'First Item',		color:'red',	size:'large'},
+					{id:2,	name:'Second Item',		color:'green',	size:'small'},
+					{id:3,	name:'Third Item',		color:'blue',	size:'medium'},
+					{id:4,	name:'Fourth Item',		color:'while',	size:'tiny'},
+					{id:5,	name:'Fifth Item',		color:'black',	size:'huge'},
+					{id:6,	name:'Sixth Item',		color:'gray',	size:'maximum'},
+					{id:7,	name:'Seventh Item',	color:'orange',	size:'minimum'},
+					{id:8,	name:'Eighth Item',		color:'purple',	size:'gigantic'},
+					{id:9,	name:'Ninth Item',		color:'brown',	size:'pico'},
+					{id:10,	name:'Tenth Item',		color:'pink',	size:'nano'}
+				];
+            });
+        </script>
+    </head>
+
+    <body ng-app="myApp">
+        <div class="container" ng-controller="MainCtrl">
+
+			<div class="page-header">
+				<h1>Fancy Sorting Example</h1>
+			</div>
+			<div class="panel panel-warning">
+				<div class="panel-heading">
+					<h3 class="panel-title">Items</h3>
+				</div>
+
+				<table class="table">
+					<tr>
+						<th class="col-sm-2"><a href ng-click="setSort('id')">ID<span ng-class="sortIcon('id')"></span></a></th>               <!-- ng-class dynamically creates a class attribute with whatever the sortIcon() returns -->
+						<th class="col-sm-4"><a href ng-click="setSort('name')">Name<span ng-class="sortIcon('name')"></span></a></th>
+						<th class="col-sm-3"><a href ng-click="setSort('color')">Color<span ng-class="sortIcon('color')"></span></a></th>
+						<th class="col-sm-3"><a href ng-click="setSort('size')">Size<span ng-class="sortIcon('size')"></span></a></th>
+					</tr>
+                    <tr ng-repeat="item in items | orderBy:sortProp:sortReverse">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.color}}</td>
+                        <td>{{item.size}}</td>
+                    </tr>
+                </table>
+	        </table>
+
+		</div>
+    </body>
+
+</html>

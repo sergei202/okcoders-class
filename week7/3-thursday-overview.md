@@ -109,3 +109,62 @@ $scope.sortDirs = [					// Sort directions
 ```
 
 See [examples/sorting-filtering/sorting3.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting-filtering/sorting3.html) for an example of the above.
+
+Can we do better?  How about adding table headers and making them clickable!
+
+For this we will add bootstrap and then setup our `<th>`s:
+
+```html
+<tr>
+	<th><a href ng-click="setSort('id')">ID</a></th>			<!-- Create clickable <a> that calls setSort() with the property we want to sort on -->
+	<th><a href ng-click="setSort('name')">Name</a></th>
+	<th><a href ng-click="setSort('color')">Color</a></th>
+	<th><a href ng-click="setSort('size')">Size</a></th>
+</tr>
+```
+
+Why are we just not setting `sortProp` directly in the `ng-click`?  Because we want to add logic to reverse the order if you click the same header:
+
+```js
+$scope.setSort = function(prop) {
+	if($scope.sortProp===prop) {        // If the sort property is already set to prop (meaning we clicked on the same header), reverse the order and return
+		$scope.sortReverse = true;
+		return;
+	}
+	$scope.sortProp = prop;
+	$scope.sortReverse = false;         // Reset sortReverse to false
+};
+```
+
+Lastly, let's add some of sort of visual indicator of which property is used for sorting and the direction.  We'll do this with another scope function called `sortIcon()` that will return CSS class glyphicons:
+
+```html
+<tr>
+	<th><a href ng-click="setSort('id')">ID<span ng-class="sortIcon('id')"></span></a></th>	<!-- ng-class dynamically creates a class attribute with whatever the sortIcon() returns -->
+	<th><a href ng-click="setSort('name')">Name<span ng-class="sortIcon('name')"></span></a></th>
+	<th><a href ng-click="setSort('color')">Color<span ng-class="sortIcon('color')"></span></a></th>
+	<th><a href ng-click="setSort('size')">Size<span ng-class="sortIcon('size')"></span></a></th>
+</tr>
+```
+
+`sortIcon()`:
+
+```js
+$scope.sortIcon = function(prop) {              // Checks to see if prop is the current sort prop and returns a glyph for that sort direction
+	if($scope.sortProp!==prop) return null;     // If sortProp isn't prop, return null
+	if($scope.sortReverse===false) return 'glyphicon glyphicon-arrow-down';     // If not reversed, show down arrow
+	if($scope.sortReverse===true)  return 'glyphicon glyphicon-arrow-up';       // If reversed, show up arrow
+};
+```
+Lastly, let's add column classes on our `<th>`s to prevent them from changing widths when the glyphicon gets moved:
+
+```html
+<tr>
+	<th class="col-sm-2"><a href ng-click="setSort('id')">ID<span ng-class="sortIcon('id')"></span></a></th>               <!-- ng-class dynamically creates a class attribute with whatever the sortIcon() returns -->
+	<th class="col-sm-4"><a href ng-click="setSort('name')">Name<span ng-class="sortIcon('name')"></span></a></th>
+	<th class="col-sm-3"><a href ng-click="setSort('color')">Color<span ng-class="sortIcon('color')"></span></a></th>
+	<th class="col-sm-3"><a href ng-click="setSort('size')">Size<span ng-class="sortIcon('size')"></span></a></th>
+</tr>
+```
+
+Check out the final sorting example: [examples/sorting-filtering/sorting4.html](https://github.com/sergei202/okcoders-class/tree/master/week7/examples/sorting-filtering/sorting4.html).
